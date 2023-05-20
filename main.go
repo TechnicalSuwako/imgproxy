@@ -5,13 +5,33 @@ import (
   "net/http"
   "io"
   "log"
+  "net/url"
 )
 
 var client = http.Client{}
 
 func imgproxy (w http.ResponseWriter, r *http.Request) {
+  // URLを確認
+  uri, err := url.Parse("https:/" + r.URL.Path)
+  if err != nil {
+    fmt.Println(err)
+    return
+  }
+
+  // HTTPリク
+  req, err := http.NewRequest("GET", "https:/" + r.URL.Path, nil)
+  if err != nil {
+    fmt.Println(err)
+    return
+  }
+
+  // Pixivかどうかの確認
+  if uri.Host == "i.pximg.net" || uri.Host == "s.pximg.net" {
+    req.Header.Set("Referer", "https://www.pixiv.net/")
+  }
+
   // r.URL.Pathは「/」で始まるから、「https://」じゃなくて、「https:/」となります。
-  img, err := client.Get("https:/" + r.URL.Path)
+  img, err := client.Do(req)
   if err != nil {
     fmt.Fprintf(w, "Error %d", err)
     return
