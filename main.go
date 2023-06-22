@@ -8,6 +8,7 @@ import (
   "net/url"
 )
 
+var version = "1.0.0"
 var client = http.Client{}
 
 func imgproxy (w http.ResponseWriter, r *http.Request) {
