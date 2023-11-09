@@ -1,11 +1,6 @@
 NAME=imgproxy
 VERSION := $(shell cat main.go | grep "var version" | awk '{print $$4}' | sed "s/\"//g")
-# Linux、Illumos
-PREFIX=/usr
-# FreeBSDとOpenBSD
-#PREFIX=/usr/local
-# NetBSD
-#PREFIX=/usr/pkg
+PREFIX=/usr/local
 CC=CGO_ENABLED=0 go build
 # リリース。なし＝デバッグ。
 RELEASE=-ldflags="-s -w" -buildvcs=false
